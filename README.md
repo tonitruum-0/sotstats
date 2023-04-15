@@ -13,4 +13,4 @@ password: your-password
 npm install vite
 
 #
-run node . in puppeteer directory
+run `node .` in puppeteer directory to run
