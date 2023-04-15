@@ -1,3 +1,9 @@
+:root {
+  --curve: 0.25vw;
+  --color1: #f53844;
+  --color2: #42378f;
+}
+
 /* General Shit */
 
 html {
@@ -45,5 +51,37 @@ html {
   margin: 1em auto;
   text-align: center;
   width: 80vw;
-  background-color: orange;
+  /* background-color: orange; */
+}
+
+#comms {
+  background-color: rgb(0, 242, 141);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.card {
+  display: flex;
+  margin: 1vw;
+  width: 5vw;
+  padding: 1vw;
+  height: auto;
+  border-radius: var(--curve);
+  background-color: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(0px) saturate(180%);
+  box-shadow: 0.5em 0.5em 1em;
+  align-items: center;
+  transition: filter 200ms ease, transform 200ms ease;
+  flex-direction: column;
+}
+
+.grade {
+  color: red;
+}
+
+.progress {
+  color: rgb(251, 0, 255);
+  font-size: 2em;
 }
