@@ -1,0 +1,49 @@
+/* General Shit */
+
+html {
+  background-color: lightblue;
+  font-family: 'Trade Winds', cursive;
+  box-sizing: border-box;
+}
+
+/* Title */
+
+.title {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+/* Settings Box */
+
+.textBox {
+  display: block;
+  margin: 1em;
+}
+
+.settings {
+  background-color: red;
+  margin: auto;
+  width: 80vw;
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+}
+
+.keys {
+  display: block;
+  margin: auto;
+}
+
+.button {
+  display: block;
+  margin: auto;
+}
+
+/* Results Box */
+
+.results {
+  margin: 1em auto;
+  text-align: center;
+  width: 80vw;
+  background-color: orange;
+}

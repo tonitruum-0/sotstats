@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sea of Thieves Achievements</title>
+
+    <link rel="icon" href="public/favicon.ico" />
+    <!--Font-->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Trade+Winds&display=swap" rel="stylesheet" />
+  </head>
+
+  <body>
+    <h1 class="title">Sea of Thieves Achievements</h1>
+
+    <div class="settings">
+      <div class="keys">
+        <input type="text" id="cookie" class="textBox" placeholder="cookie" />
+        <input type="text" id="token" class="textBox" placeholder="x-csrf-token" width="65" />
+      </div>
+      <button class="button submitButton" id="submitButton">Refresh</button>
+      <button class="button" id="testBtn">do the funny</button>
+    </div>
+
+    <div class="results">
+      <label for="displayFilter">Display:</label>
+      <select name="displayFilter" id="displayFilter">
+        <option value="" selected disabled hidden></option>
+
+        <option value="all">All</option>
+        <option value="complete">Complete</option>
+        <option value="incomplete">Incomplete</option>
+        <option value="unlocked">Unlocked</option>
+        <option value="locked">Locked</option>
+      </select>
+
+      <label for="categoryFilter">From:</label>
+      <select name="categoryFilter" id="categoryFilter">
+        <option value="" selected disabled hidden></option>
+        <option value="All">All</option>
+        <option value="AthenasFortune">Athenas Fortune</option>
+        <option value="HuntersCall">Hunters Call</option>
+        <option value="SeaDogs">Sea Dogs</option>
+        <option value="GoldHoarders">Gold Hoarders</option>
+        <option value="OrderOfSouls">Order Of Souls</option>
+        <option value="MerchantAlliance">Merchant Alliance</option>
+        <option value="CreatorCrew">Creator Crew</option>
+        <option value="BilgeRats">Bilge Rats</option>
+        <option value="TallTales">Tall Tales</option>
+        <option value="ReapersBones">Reapers Bones</option>
+        <option value="PirateLord">Pirate Lord</option>
+        <option value="Flameheart">Flameheart</option>
+      </select>
+
+      <div id="comms" class="commendations">here</div>
+    </div>
+  </body>
+  <script src="main.js" type="module"></script>
+</html>
