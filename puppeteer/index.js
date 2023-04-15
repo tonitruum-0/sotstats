@@ -21,9 +21,7 @@ function navigate() {
   console.log('Page is live! http://127.0.0.1:5173/');
 }
 
-navigate();
-
-/* (async () => {
+(async () => {
   const browser = await puppeteer.launch({ headless: false });
   const page = await browser.newPage();
   await page.goto('https://www.seaofthieves.com/profile/reputation/');
@@ -65,8 +63,8 @@ navigate();
         if (err) throw err;
         console.log('Response saved to file!');
         browser.close();
+        navigate();
       });
     }
   });
 })();
- */
