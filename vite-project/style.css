@@ -1,7 +1,15 @@
+@import './keyframes.css';
+
 :root {
   --curve: 0.25vw;
   --color1: #f53844;
   --color2: #42378f;
+  --grade: rgb(255, 0, 0);
+  --progress: rgb(80, 0, 111);
+  --max-grade: rgba(255, 56, 56, 0.51);
+  --single-grade: rgba(60, 0, 255, 0.5);
+  --completed: rgba(0, 255, 38, 0.461);
+  --locked: rgba(0, 0, 0, 0.661);
 }
 
 /* General Shit */
@@ -55,7 +63,7 @@ html {
 }
 
 #comms {
-  background-color: rgb(0, 242, 141);
+  /* background-color: rgb(0, 242, 141); */
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -78,10 +86,44 @@ html {
 }
 
 .grade {
-  color: red;
+  color: var(--grade);
 }
 
 .progress {
-  color: rgb(251, 0, 255);
+  color: var(--progress);
   font-size: 2em;
+}
+
+.max-grade {
+  background-color: var(--max-grade);
+}
+
+.single-grade {
+  background-color: var(--single-grade);
+}
+
+.completed {
+  background-color: var(--completed);
+}
+
+.locked {
+  background-color: var(--locked);
+}
+
+.bg {
+  z-index: -1;
+  width: 100%;
+  overflow: hidden;
+  position: fixed;
+  inset: 0;
+}
+
+.bg::before {
+  width: calc(100vw + 100vh);
+  height: calc(100vw + 100vh);
+  content: '';
+  position: absolute;
+  background-image: conic-gradient(var(--color1), var(--color2), var(--color1));
+  animation: 15s linear infinite rot;
+  translate: -50vh -50vw;
 }

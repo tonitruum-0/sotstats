@@ -19,47 +19,39 @@ export function parse(e) {
     titles.forEach((title) => {
       //if not campaign
       if (!data[title].Campaigns) {
-        parseEmblems(title, data[title].Emblems.Emblems, true);
+        parseEmblems(data[title].Emblems.Emblems);
         //if campaign
       } else if (data[title].Campaigns) {
         let campaigns = Object.keys(data[title].Campaigns);
         campaigns.forEach((campaign) => {
           let x = data[title].Campaigns[campaign].Emblems;
 
-          parseCampaigns(title, x, true);
+          parseEmblems(x);
         });
-        //parseCampaigns(title, data[title].Campaigns[campaigns].Emblems, true);
       }
     });
   } else {
     if (!data[current].Campaigns) {
-      parseEmblems(current, data[current].Emblems.Emblems, false);
+      parseEmblems(data[current].Emblems.Emblems);
     } else if (data[current].Campaigns) {
       let campaigns = Object.keys(data[current].Campaigns);
       campaigns.forEach((campaign) => {
-        parseCampaigns(current, data[current].Campaigns[campaign].Emblems);
+        parseEmblems(data[current].Campaigns[campaign].Emblems);
       });
-
-      //parseCampaigns(current, data[current].Emblems.Emblems, false);
     }
   }
 }
 
-function parseEmblems(title, emblemData, isAll) {
+function parseEmblems(emblemData) {
   emblemData.forEach((item) => {
-    if (item.MaxGrade === 1) {
-      document.getElementById('comms').innerHTML += `<div class="card">${item.Description} <span class="progress">${item.Value}/${item.Threshold}</span></div>`;
-    } else {
-      //prettier-ignore
-      document.getElementById('comms').innerHTML +=`<div class="card">${item.Description} <span class="grade">Grade ${item.Grade}/${item.MaxGrade}</span> <span class="progress">${item.Value}/${item.Threshold}</span></div>`;
-    }
-  });
-}
-
-function parseCampaigns(title, emblemData, isAll) {
-  emblemData.forEach((item) => {
-    if (item.MaxGrade === 1) {
-      document.getElementById('comms').innerHTML += `<div class="card">${item.Description} <span class="progress">${item.Value}/${item.Threshold}</span></div>`;
+    if (item.locked === true && item.Threshold === 0) {
+      document.getElementById('comms').innerHTML += `<div class="card locked">${item.Description} <span class="grade ">Locked</span></div>`;
+    } else if (item.Threshold === 0) {
+      document.getElementById('comms').innerHTML += `<div class="card completed">${item.Description} <span class="grade ">Completed</span></div>`;
+    } else if (item.MaxGrade === 1) {
+      document.getElementById('comms').innerHTML += `<div class="card single-grade">${item.Description} <span class="progress">${item.Value}/${item.Threshold}</span></div>`;
+    } else if (eval(item.Grade / item.MaxGrade) === 1) {
+      document.getElementById('comms').innerHTML += `<div class="card max-grade">${item.Description} <span class="grade">Grade ${item.Grade}/${item.MaxGrade}</span> <span class="progress">${item.Value}/${item.Threshold}</span></div>`;
     } else {
       //prettier-ignore
       document.getElementById('comms').innerHTML +=`<div class="card">${item.Description} <span class="grade">Grade ${item.Grade}/${item.MaxGrade}</span> <span class="progress">${item.Value}/${item.Threshold}</span></div>`;

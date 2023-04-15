@@ -1,4 +1,3 @@
-import * as api from './utils/api.js';
 import * as parsing from './utils/parse.js';
 import './style.css';
 

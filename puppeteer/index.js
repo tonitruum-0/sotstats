@@ -1,24 +1,31 @@
+const { exec } = require('child_process');
 const puppeteer = require('puppeteer-extra');
 const StealthPlugin = require('puppeteer-extra-plugin-stealth');
 const AdBlockerPlugin = require('puppeteer-extra-plugin-adblocker');
 const dotenv = require('dotenv');
+const fs = require('fs');
 dotenv.config();
 
 puppeteer.use(StealthPlugin());
 puppeteer.use(AdBlockerPlugin({ blockTrackers: true }));
 
-(async () => {
-  await page.setRequestInterception(true);
+function navigate() {
+  exec('cd .. && cd vite-project && npm run dev', (error, stdout, stderr) => {
+    if (error) {
+      console.error(`exec error: ${error}`);
+      return;
+    }
+    console.log(`stdout: ${stdout}`);
+    console.error(`stderr: ${stderr}`);
+  });
+  console.log('Page is live! http://127.0.0.1:5173/');
+}
+
+navigate();
+
+/* (async () => {
   const browser = await puppeteer.launch({ headless: false });
   const page = await browser.newPage();
-
-  await page.setRequestInterception(true);
-  page.on('response', async (response) => {
-    if (response.url().includes('example.com/api/endpoint')) {
-      console.log(await response.json()); // Access the response data
-    }
-  });
-
   await page.goto('https://www.seaofthieves.com/profile/reputation/');
 
   await page.click('a.button--standard');
@@ -50,6 +57,16 @@ puppeteer.use(AdBlockerPlugin({ blockTrackers: true }));
 
   await page.waitForSelector('#idBtn_Back');
   await page.click('#idBtn_Back');
-
-  // await browser.close();
+  page.on('response', async (response) => {
+    if (response.url().endsWith('/api/profilev2/reputation')) {
+      let responseBody = await response.text();
+      responseBody = `export let data = ${responseBody}`;
+      fs.writeFile('../vite-project/utils/data.js', responseBody, (err) => {
+        if (err) throw err;
+        console.log('Response saved to file!');
+        browser.close();
+      });
+    }
+  });
 })();
+ */
