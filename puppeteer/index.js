@@ -1,4 +1,5 @@
 const { exec } = require('child_process');
+const { spawn } = require('child_process');
 const puppeteer = require('puppeteer-extra');
 const StealthPlugin = require('puppeteer-extra-plugin-stealth');
 const AdBlockerPlugin = require('puppeteer-extra-plugin-adblocker');
@@ -24,6 +25,10 @@ function navigate() {
 (async () => {
   const browser = await puppeteer.launch({ headless: false });
   const page = await browser.newPage();
+  await page.setViewport({
+    width: 640,
+    height: 480,
+  });
   await page.goto('https://www.seaofthieves.com/profile/reputation/');
 
   await page.click('a.button--standard');

@@ -44,18 +44,37 @@ export function parse(e) {
 
 function parseEmblems(emblemData) {
   emblemData.forEach((item) => {
-    if (item.locked === true && item.Threshold === 0) {
-      document.getElementById('comms').innerHTML += `<div class="card locked">${item.Description} <span class="grade ">Locked</span></div>`;
-    } else if (item.Threshold === 0) {
-      document.getElementById('comms').innerHTML += `<div class="card completed">${item.Description} <span class="grade ">Completed</span></div>`;
-    } else if (item.MaxGrade === 1) {
-      document.getElementById('comms').innerHTML += `<div class="card single-grade">${item.Description} <span class="progress">${item.Value}/${item.Threshold}</span></div>`;
-    } else if (eval(item.Grade / item.MaxGrade) === 1) {
-      document.getElementById('comms').innerHTML += `<div class="card max-grade">${item.Description} <span class="grade">Grade ${item.Grade}/${item.MaxGrade}</span> <span class="progress">${item.Value}/${item.Threshold}</span></div>`;
+    let width;
+    if (item.MaxGrade === 1 && item.Value / item.Threshold === 1) {
+      width = 71;
     } else {
-      //prettier-ignore
-      document.getElementById('comms').innerHTML +=`<div class="card">${item.Description} <span class="grade">Grade ${item.Grade}/${item.MaxGrade}</span> <span class="progress">${item.Value}/${item.Threshold}</span></div>`;
+      width = (item.Value / item.Threshold) * 71;
     }
+    document.getElementById('comms').innerHTML += `<div class="item">
+    <div class="img-container">
+      <button class="button"type="button" value="x">
+        <svg id="surround">
+          <image class="profile-grid__item-background" xlink:href="https://athwsue2-prd-webscript-cdn-endpoint.azureedge.net/98ff6959413c46a6e7cb99d37d4e80aa/assets/profilev2/emblem-no-bg.png" height="98%" width="98%" x="1%" y="1%"></image>
+          <image class="profile-grid__item-image" clip-path="url(#item-mask)" height="121" width="120" x="11" y="11" xlink:href="${item.image}"></image>
+          <use class="surround" xlink:href="#border" height="100%" width="100%"></use>
+        </svg>
+      </button>
+    </div>
+    <div class="info-container">
+      <div class="title">${item.DisplayName}</div>
+      <div class="progress">
+        <svg class="progress-bar" width="73" height="12" viewBox="0 0 73 12" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="1" y="1" width="71" height="10" fill="#323335"></rect>
+          <rect x="1" y="1" width="${width}" height="10" fill="#578C85"></rect>
+          <rect class="indicator" x="0" y="0" width="73" height="12" fill="#0F0D09" clip-path="url(#progress-short)"></rect>
+        </svg>
+        <div class="progress-text">${item.Value}/${item.Threshold}</div>
+      </div>
+      <div class="description">
+        <p class="desc-text">Grade ${item.Grade} - ${item.Description}</p>
+      </div>
+    </div>
+  </div>`;
   });
 }
 
@@ -65,15 +84,15 @@ function display(e) {
   let closestArr = [];
   //sort all currently displayed cards by closest progress to 1
   if (used === false) {
-    progress = document.querySelectorAll('.progress');
+    progress = document.querySelectorAll('.progress-text');
     used = true;
   }
   let usedProgress = progress;
   usedProgress.forEach((item) => {
     if (eval(item.outerText) === 1) {
-      completeArr.push(item.parentElement);
+      completeArr.push(item.parentElement.parentElement.parentElement);
     } else {
-      incompleteArr.push(item.parentElement);
+      incompleteArr.push(item.parentElement.parentElement.parentElement);
     }
   });
   if (e.target.value === 'complete') {
@@ -89,7 +108,7 @@ function display(e) {
   } else if (e.target.value === 'all') {
     document.getElementById('comms').innerHTML = '';
     progress.forEach((item) => {
-      document.getElementById('comms').appendChild(item.parentElement);
+      document.getElementById('comms').appendChild(item.parentElement.parentElement.parentElement);
     });
   } else if (e.target.value === 'closest') {
     //display all cards by closest progress to 1
@@ -104,7 +123,8 @@ function display(e) {
       return b.value - a.value;
     });
     closestArr.forEach((item) => {
-      document.getElementById('comms').appendChild(item.element.parentElement);
+      console.log(item.element.parentElement.parentElement.parentElement);
+      document.getElementById('comms').appendChild(item.element.parentElement.parentElement.parentElement);
     });
   }
 }
