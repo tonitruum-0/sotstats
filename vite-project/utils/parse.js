@@ -55,7 +55,7 @@ function parseEmblems(emblemData) {
       <button class="button"type="button" value="x">
         <svg id="surround">
           <image class="profile-grid__item-background" xlink:href="https://athwsue2-prd-webscript-cdn-endpoint.azureedge.net/98ff6959413c46a6e7cb99d37d4e80aa/assets/profilev2/emblem-no-bg.png" height="98%" width="98%" x="1%" y="1%"></image>
-          <image class="profile-grid__item-image" clip-path="url(#item-mask)" height="121" width="120" x="11" y="11" xlink:href="${item.image}"></image>
+          <image class="profile-grid__item-image" clip-path="url(#item-mask)" height="98%" width="98%" x="1%" y="1%" xlink:href="${item.image}"></image>
           <use class="surround" xlink:href="#border" height="100%" width="100%"></use>
         </svg>
       </button>
@@ -108,7 +108,9 @@ function display(e) {
   } else if (e.target.value === 'all') {
     document.getElementById('comms').innerHTML = '';
     progress.forEach((item) => {
-      document.getElementById('comms').appendChild(item.parentElement.parentElement.parentElement);
+      document
+        .getElementById('comms')
+        .appendChild(item.parentElement.parentElement.parentElement);
     });
   } else if (e.target.value === 'closest') {
     //display all cards by closest progress to 1
@@ -124,7 +126,9 @@ function display(e) {
     });
     closestArr.forEach((item) => {
       console.log(item.element.parentElement.parentElement.parentElement);
-      document.getElementById('comms').appendChild(item.element.parentElement.parentElement.parentElement);
+      document
+        .getElementById('comms')
+        .appendChild(item.element.parentElement.parentElement.parentElement);
     });
   }
 }
