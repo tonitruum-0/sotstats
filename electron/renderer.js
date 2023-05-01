@@ -4,8 +4,8 @@ const { exec } = require('child_process');
 let child;
 
 function start() {
-  //const spawn = require('child_process').spawn;
-  //child = spawn('node', ['index.js'], { cwd: '../puppeteer' });
+  const spawn = require('child_process').spawn;
+  child = spawn('node', ['index.js'], { cwd: '../puppeteer' });
   navigate();
   alert('Puppeteer is running!');
 }
