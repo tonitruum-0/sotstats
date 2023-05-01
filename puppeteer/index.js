@@ -10,18 +10,6 @@ dotenv.config();
 puppeteer.use(StealthPlugin());
 puppeteer.use(AdBlockerPlugin({ blockTrackers: true }));
 
-function navigate() {
-  exec('cd .. && cd vite-project && npm run dev', (error, stdout, stderr) => {
-    if (error) {
-      console.error(`exec error: ${error}`);
-      return;
-    }
-    console.log(`stdout: ${stdout}`);
-    console.error(`stderr: ${stderr}`);
-  });
-  console.log('Page is live! http://127.0.0.1:5173/');
-}
-
 (async () => {
   const browser = await puppeteer.launch({ headless: false });
   const page = await browser.newPage();
@@ -68,7 +56,7 @@ function navigate() {
         if (err) throw err;
         console.log('Response saved to file!');
         browser.close();
-        navigate();
+        // navigate();
       });
     }
   });

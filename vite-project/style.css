@@ -242,7 +242,7 @@ defs {
 }
 
 .fish-table-title {
-  color:white;
+  color: white;
 }
 
 .fish-table {
@@ -252,10 +252,14 @@ defs {
 }
 
 .fish-table-cell {
-  color:white;
+  color: white;
 }
 
 .fish-image {
   max-width: 175px;
   max-height: 175px;
+}
+
+.fish {
+  display: none;
 }

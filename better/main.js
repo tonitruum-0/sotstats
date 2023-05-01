@@ -1,11 +1,7 @@
-import '../style.css';
+import './style.css';
 
-import { Commendation } from './commendation.js';
-import { data } from './data.js';
-
-window.onbeforeunload = function () {
-  window.scrollTo(0, 0);
-};
+import { Commendation } from './commendation';
+import { data } from './commendations';
 
 let all = [];
 let sortedAll = [];
@@ -272,84 +268,22 @@ all.forEach((e) => {
 });
 */
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// DISPLAY STUFF - PROBABLY MOVE TO ANOTHER FILE ////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-let paginationArr = [];
-createArr(false);
-function createArr(boolDisplaySorted) {
-  let arrayToDisplay = boolDisplaySorted == true ? sortedAll : all;
-  paginationArr = arrayToDisplay;
-  pagination(paginationArr);
-}
+///////////////////////////////////////////////////
+// DISPLAY STUFF - PROBABLY MOVE TO ANOTHER FILE //
+///////////////////////////////////////////////////
+createDOM(false);
+function createDOM(boolDisplaySorted) {
+  console.log(sortedAll);
+  console.log(all);
+  arrayToDisplay = boolDisplaySorted == true ? sortedAll : all;
 
-let ran = false;
-let offset;
-
-window.onscroll = function () {
-  if (!ran) {
-    offset = document.body.offsetHeight * 0.3;
-    ran = true;
-  } else {
-    if (
-      window.innerHeight + window.pageYOffset >=
-      document.body.offsetHeight - document.body.offsetHeight * 0.1
-    ) {
-      pagination(paginationArr);
-    }
-  }
-};
-
-function pagination(arr) {
-  let len;
-  if (arr.length < 15) {
-    len = arr.length;
-  } else {
-    len = 15;
-  }
-  for (let i = 0; i < len; i++) {
-    createDOM(arr[i]);
-  }
-  for (let i = 0; i < len; i++) {
-    arr.shift();
-  }
-}
-
-function createDOM(commendation) {
-  let width;
-  if (
-    commendation.maxGrade === 1 &&
-    commendation.value / commendation.threshold === 1
-  ) {
-    width = 71;
-  } else {
-    width = (commendation.value / commendation.threshold) * 71;
-  }
-  document.getElementById('comms').innerHTML += `<div class="item">
-       <div class="img-container">
-         <button class="button"type="button" value="x">
-           <svg id="surround">
-             <image class="profile-grid__item-background" xlink:href="https://athwsue2-prd-webscript-cdn-endpoint.azureedge.net/98ff6959413c46a6e7cb99d37d4e80aa/assets/profilev2/emblem-no-bg.png" height="98%" width="98%" x="1%" y="1%"></image>
-             <image class="profile-grid__item-image" clip-path="url(#item-mask)" height="98%" width="98%" x="1%" y="1%" xlink:href="${commendation.image}"></image>
-             <use class="surround" xlink:href="#border" height="100%" width="100%"></use>
-           </svg>
-         </button>
-       </div>
-       <div class="info-container">
-         <div class="title">${commendation.title}</div>
-         <div class="progress">
-           <svg class="progress-bar" width="73" height="12" viewBox="0 0 73 12" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-             <rect x="1" y="1" width="71" height="10" fill="#323335"></rect>
-             <rect x="1" y="1" width="${width}" height="10" fill="#578C85"></rect>
-             <rect class="indicator" x="0" y="0" width="73" height="12" fill="#0F0D09" clip-path="url(#progress-short)"></rect>
-           </svg>
-           <div class="progress-text">${commendation.value}/${commendation.threshold}</div>
-         </div>
-         <div class="description">
-           <p class="desc-text">Grade ${commendation.grade} - ${commendation.subtitle}</p>
-         </div>
-       </div>
-     </div>`;
+  arrayToDisplay.forEach((commendation) => {
+    console.log(commendation);
+    // Do stuff
+    // Also make sure to add css classes to the elements using both their tags and the category
+    // For example, if the commendation has the tags "Single Grade" and "Complete", and is in the category "Gold Hoarders", the element should have the classes "single-grade complete gold-hoarders"
+    // That prev line is made by ai, thats cool af lmao
+  });
 }
 
 // Add event listener to dropdown
