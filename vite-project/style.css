@@ -19,15 +19,7 @@ html {
   background-color: lightblue;
   box-sizing: border-box;
 
-  background: #0b1e24
-    linear-gradient(
-      to right,
-      rgb(1, 13, 11) 0%,
-      rgb(11, 30, 36) 25%,
-      rgb(11, 30, 36) 75%,
-      rgb(1, 13, 11) 100%
-    )
-    repeat-y;
+  background: #0b1e24 linear-gradient(to right, rgb(1, 13, 11) 0%, rgb(11, 30, 36) 25%, rgb(11, 30, 36) 75%, rgb(1, 13, 11) 100%) repeat-y;
 }
 
 /* Title */
@@ -65,6 +57,15 @@ html {
 }
 
 /* Results Box */
+
+label,
+select {
+  margin: 0 1rem 3rem 0;
+}
+
+label {
+  color: white;
+}
 
 .results {
   margin: 1em auto;
