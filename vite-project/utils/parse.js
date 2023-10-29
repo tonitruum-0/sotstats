@@ -141,7 +141,6 @@ function reloadCommendations() {
       });
     }
   });
-  console.log(all);
   /// Do fishing commendations separately
 
   // Make array of valid fish names
@@ -196,7 +195,6 @@ function reloadCommendations() {
 
 // Depends on how you are loading the data using pupeteer, call function as needed
 reloadCommendations();
-console.log(sortedAll);
 // Example usage
 /*
 Object.keys(fishing).forEach((type) => {
@@ -300,13 +298,13 @@ function createDOM(commendation) {
 }
 
 // Add event listener to dropdown
-document.getElementById('displayFilter').addEventListener('change', () => {
-  if (document.getElementById('displayFilter').value == 'complete') {
-    createDOM(true);
-  } else {
-    createDOM(false);
-  }
-});
+// document.getElementById('displayFilter').addEventListener('change', () => {
+//   if (document.getElementById('displayFilter').value == 'complete') {
+//     createDOM(true);
+//   } else {
+//     createDOM(false);
+//   }
+// });
 // if dropdown changed to sort by completion, call createDOM(true)
 // else call createDOM(false)
 
