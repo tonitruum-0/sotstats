@@ -120,32 +120,10 @@ function reloadCommendations() {
         if (commendation.Completed) {
           // all completed commendations have this tag
           // Just fix the grade, value and threshold
-          all.push(
-            new Commendation(
-              allCategories[category],
-              commendation.title,
-              commendation.subtitle,
-              commendation.MaxGrade,
-              commendation.MaxGrade,
-              commendation.Threshold == 0 ? 1 : commendation.Value,
-              commendation.Threshold == 0 ? 1 : commendation.Threshold,
-              commendation.image
-            )
-          );
+          all.push(new Commendation(allCategories[category], commendation.title, commendation.subtitle, commendation.MaxGrade, commendation.MaxGrade, commendation.Threshold == 0 ? 1 : commendation.Value, commendation.Threshold == 0 ? 1 : commendation.Threshold, commendation.image));
           return;
         }
-        all.push(
-          new Commendation(
-            allCategories[category],
-            commendation.title,
-            commendation.subtitle,
-            commendation.Grade,
-            commendation.MaxGrade,
-            commendation.Value,
-            commendation.Threshold,
-            commendation.image
-          )
-        );
+        all.push(new Commendation(allCategories[category], commendation.title, commendation.subtitle, commendation.Grade, commendation.MaxGrade, commendation.Value, commendation.Threshold, commendation.image));
       });
     } else {
       // "Hard" categories that have campaigns (bilge rats, tall tales, hunters call)
@@ -154,38 +132,16 @@ function reloadCommendations() {
           if (commendation.Completed) {
             // all completed commendations have this tag
             // Just fix the grade, value and threshold
-            all.push(
-              new Commendation(
-                allCategories[category],
-                commendation.title,
-                commendation.subtitle,
-                commendation.MaxGrade,
-                commendation.MaxGrade,
-                commendation.Threshold == 0 ? 1 : commendation.Value,
-                commendation.Threshold == 0 ? 1 : commendation.Threshold,
-                commendation.image
-              )
-            );
+            all.push(new Commendation(allCategories[category], commendation.title, commendation.subtitle, commendation.MaxGrade, commendation.MaxGrade, commendation.Threshold == 0 ? 1 : commendation.Value, commendation.Threshold == 0 ? 1 : commendation.Threshold, commendation.image));
             return;
           }
           // Otherwise its not completed, so add it normally
-          all.push(
-            new Commendation(
-              allCategories[category],
-              commendation.title,
-              commendation.subtitle,
-              commendation.Grade,
-              commendation.MaxGrade,
-              commendation.Value,
-              commendation.Threshold,
-              commendation.image
-            )
-          );
+          all.push(new Commendation(allCategories[category], commendation.title, commendation.subtitle, commendation.Grade, commendation.MaxGrade, commendation.Value, commendation.Threshold, commendation.image));
         });
       });
     }
   });
-
+  console.log(all);
   /// Do fishing commendations separately
 
   // Make array of valid fish names
@@ -227,28 +183,20 @@ function reloadCommendations() {
   });
 
   // Add in the cooking commendations (Not sure if we should keep this)
-  fishing['cooking']['chicken'].delivered =
-    data.HuntersCall.Campaigns.cooking.Emblems[0].Value;
-  fishing['cooking']['pork'].delivered =
-    data.HuntersCall.Campaigns.cooking.Emblems[1].Value;
-  fishing['cooking']['snake'].delivered =
-    data.HuntersCall.Campaigns.cooking.Emblems[2].Value;
-  fishing['cooking']['shark'].delivered =
-    data.HuntersCall.Campaigns.cooking.Emblems[3].Value;
-  fishing['cooking']['megalodon'].delivered =
-    data.HuntersCall.Campaigns.cooking.Emblems[4].Value;
-  fishing['cooking']['kraken'].delivered =
-    data.HuntersCall.Campaigns.cooking.Emblems[5].Value;
+  fishing['cooking']['chicken'].delivered = data.HuntersCall.Campaigns.cooking.Emblems[0].Value;
+  fishing['cooking']['pork'].delivered = data.HuntersCall.Campaigns.cooking.Emblems[1].Value;
+  fishing['cooking']['snake'].delivered = data.HuntersCall.Campaigns.cooking.Emblems[2].Value;
+  fishing['cooking']['shark'].delivered = data.HuntersCall.Campaigns.cooking.Emblems[3].Value;
+  fishing['cooking']['megalodon'].delivered = data.HuntersCall.Campaigns.cooking.Emblems[4].Value;
+  fishing['cooking']['kraken'].delivered = data.HuntersCall.Campaigns.cooking.Emblems[5].Value;
 
   // Create sorted array
-  sortedAll = [...all].sort((a, b) =>
-    b.percent > a.percent ? 1 : b.percent < a.percent ? -1 : 0
-  );
+  sortedAll = [...all].sort((a, b) => (b.percent > a.percent ? 1 : b.percent < a.percent ? -1 : 0));
 }
 
 // Depends on how you are loading the data using pupeteer, call function as needed
 reloadCommendations();
-
+console.log(sortedAll);
 // Example usage
 /*
 Object.keys(fishing).forEach((type) => {
@@ -291,10 +239,7 @@ window.onscroll = function () {
     offset = document.body.offsetHeight * 0.3;
     ran = true;
   } else {
-    if (
-      window.innerHeight + window.pageYOffset >=
-      document.body.offsetHeight - document.body.offsetHeight * 0.1
-    ) {
+    if (window.innerHeight + window.pageYOffset >= document.body.offsetHeight - document.body.offsetHeight * 0.1) {
       pagination(paginationArr);
     }
   }
@@ -317,19 +262,22 @@ function pagination(arr) {
 
 function createDOM(commendation) {
   let width;
-  if (
-    commendation.maxGrade === 1 &&
-    commendation.value / commendation.threshold === 1
-  ) {
+  if (commendation.maxGrade === 1 && commendation.value / commendation.threshold === 1) {
     width = 71;
+  } else if (commendation.threshold === 0) {
+    width = 0;
   } else {
     width = (commendation.value / commendation.threshold) * 71;
+  }
+
+  if (isNaN(width)) {
+    console.log(commendation.threshold);
+    console.log(commendation);
   }
   document.getElementById('comms').innerHTML += `<div class="item">
        <div class="img-container">
          <button class="button"type="button" value="x">
            <svg id="surround">
-             <image class="profile-grid__item-background" xlink:href="https://athwsue2-prd-webscript-cdn-endpoint.azureedge.net/98ff6959413c46a6e7cb99d37d4e80aa/assets/profilev2/emblem-no-bg.png" height="98%" width="98%" x="1%" y="1%"></image>
              <image class="profile-grid__item-image" clip-path="url(#item-mask)" height="98%" width="98%" x="1%" y="1%" xlink:href="${commendation.image}"></image>
              <use class="surround" xlink:href="#border" height="100%" width="100%"></use>
            </svg>
@@ -341,8 +289,7 @@ function createDOM(commendation) {
            <svg class="progress-bar" width="73" height="12" viewBox="0 0 73 12" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
              <rect x="1" y="1" width="71" height="10" fill="#323335"></rect>
              <rect x="1" y="1" width="${width}" height="10" fill="#578C85"></rect>
-             <rect class="indicator" x="0" y="0" width="73" height="12" fill="#0F0D09" clip-path="url(#progress-short)"></rect>
-           </svg>
+             
            <div class="progress-text">${commendation.value}/${commendation.threshold}</div>
          </div>
          <div class="description">
@@ -353,6 +300,13 @@ function createDOM(commendation) {
 }
 
 // Add event listener to dropdown
+document.getElementById('displayFilter').addEventListener('change', () => {
+  if (document.getElementById('displayFilter').value == 'complete') {
+    createDOM(true);
+  } else {
+    createDOM(false);
+  }
+});
 // if dropdown changed to sort by completion, call createDOM(true)
 // else call createDOM(false)
 
