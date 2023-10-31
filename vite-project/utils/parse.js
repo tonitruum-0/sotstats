@@ -1,231 +1,63 @@
-import '../style.css';
-
-import { Commendation } from './commendation.js';
 import { data } from './data.js';
 
-window.onbeforeunload = function () {
-  window.scrollTo(0, 0);
-};
+let progress;
+let used = false;
 
-let all = [];
-let sortedAll = [];
-let fishing = {
-  splashtail: {
-    ruby: { delivered: 0, required: 50 },
-    sunny: { delivered: 0, required: 50 },
-    indigo: { delivered: 0, required: 50 },
-    umber: { delivered: 0, required: 10 },
-    seafoam: { delivered: 0, required: 50 },
-  },
-  plentifin: {
-    olive: { delivered: 0, required: 50 },
-    amber: { delivered: 0, required: 50 },
-    cloudy: { delivered: 0, required: 50 },
-    bonedust: { delivered: 0, required: 10 },
-    watery: { delivered: 0, required: 50 },
-  },
-  ancientscale: {
-    almond: { delivered: 0, required: 50 },
-    sapphire: { delivered: 0, required: 50 },
-    smoke: { delivered: 0, required: 50 },
-    bone: { delivered: 0, required: 10 },
-    starshine: { delivered: 0, required: 50 },
-  },
-  wildsplash: {
-    russet: { delivered: 0, required: 50 },
-    sandy: { delivered: 0, required: 50 },
-    ocean: { delivered: 0, required: 50 },
-    muddy: { delivered: 0, required: 10 },
-    coral: { delivered: 0, required: 50 },
-  },
-  devilfish: {
-    ashen: { delivered: 0, required: 50 },
-    seashell: { delivered: 0, required: 50 },
-    lava: { delivered: 0, required: 50 },
-    forsaken: { delivered: 0, required: 10 },
-    firelight: { delivered: 0, required: 50 },
-  },
-  islehopper: {
-    stone: { delivered: 0, required: 50 },
-    moss: { delivered: 0, required: 50 },
-    raven: { delivered: 0, required: 10 },
-    honey: { delivered: 0, required: 50 },
-    amethyst: { delivered: 0, required: 50 },
-  },
-  pondie: {
-    charcoal: { delivered: 0, required: 50 },
-    orchid: { delivered: 0, required: 50 },
-    bronze: { delivered: 0, required: 50 },
-    bright: { delivered: 0, required: 10 },
-    moonsky: { delivered: 0, required: 50 },
-  },
-  battlegill: {
-    jade: { delivered: 0, required: 50 },
-    sky: { delivered: 0, required: 50 },
-    rum: { delivered: 0, required: 50 },
-    sand: { delivered: 0, required: 10 },
-    bittersweet: { delivered: 0, required: 50 },
-  },
-  stormfish: {
-    ancient: { delivered: 0, required: 50 },
-    shores: { delivered: 0, required: 50 },
-    wild: { delivered: 0, required: 50 },
-    shadow: { delivered: 0, required: 10 },
-    twilight: { delivered: 0, required: 50 },
-  },
-  wrecker: {
-    rose: { delivered: 0, required: 50 },
-    sun: { delivered: 0, required: 50 },
-    blackcloud: { delivered: 0, required: 50 },
-    snow: { delivered: 0, required: 10 },
-    moon: { delivered: 0, required: 50 },
-  },
-  cooking: {
-    chicken: { delivered: 0, required: 50 },
-    pork: { delivered: 0, required: 50 },
-    snake: { delivered: 0, required: 50 },
-    shark: { delivered: 0, required: 50 },
-    megalodon: { delivered: 0, required: 50 },
-    kraken: { delivered: 0, required: 50 },
-  },
-};
+//document.getElementById('testBtn').addEventListener('click', parse);
+document.getElementById('categoryFilter').addEventListener('change', parse);
+document.getElementById('displayFilter').addEventListener('change', display);
 
-let allCategories = {
-  AthenasFortune: 'AF',
-  HuntersCall: 'HC',
-  SeaDogs: 'SD',
-  GoldHoarders: 'GH',
-  OrderOfSouls: 'OS',
-  MerchantAlliance: 'MA',
-  CreatorCrew: 'CC',
-  BilgeRats: 'BR',
-  TallTales: 'TT',
-  ReapersBones: 'RB',
-  PirateLord: 'PL',
-  Flameheart: 'FH',
-};
+export function parse(e) {
+  progress = [];
+  used = false;
+  document.getElementById('displayFilter').selectedIndex = 0;
+  document.getElementById('comms').innerHTML = '';
+  let current = e.target.value;
+  let titles = Object.keys(data);
+  let all = [];
+  let campaignArr = [];
 
-let hardCategories = {
-  HuntersCall: 'HC',
-  BilgeRats: 'BR',
-  TallTales: 'TT',
-};
+  if (e.target.value === 'All') {
+    titles.forEach((title) => {
+      //if not campaign
+      if (!data[title].Campaigns) {
+        data[title].Emblems.Emblems.forEach((emblem) => {
+          all.push(emblem);
+        });
+        //console.log(data[title].Emblems.Emblems);
+        //createArr(data[title].Emblems.Emblems);
+        //if campaign
+      } else if (data[title].Campaigns) {
+        let campaigns = Object.keys(data[title].Campaigns);
+        campaigns.forEach((campaign) => {
+          data[title].Campaigns[campaign].Emblems.forEach((emblem) => {
+            all.push(emblem);
+          });
 
-function reloadCommendations() {
-  // Make array of all commendations
-  Object.keys(allCategories).forEach((category) => {
-    // Easy categories that dont have campaigns
-    if (!(category in hardCategories)) {
-      data[category].Emblems.Emblems.forEach((commendation) => {
-        if (commendation.Completed) {
-          // all completed commendations have this tag
-          // Just fix the grade, value and threshold
-          all.push(new Commendation(allCategories[category], commendation.title, commendation.subtitle, commendation.MaxGrade, commendation.MaxGrade, commendation.Threshold == 0 ? 1 : commendation.Value, commendation.Threshold == 0 ? 1 : commendation.Threshold, commendation.image));
-          return;
-        }
-        all.push(new Commendation(allCategories[category], commendation.title, commendation.subtitle, commendation.Grade, commendation.MaxGrade, commendation.Value, commendation.Threshold, commendation.image));
-      });
-    } else {
-      // "Hard" categories that have campaigns (bilge rats, tall tales, hunters call)
-      Object.keys(data[category].Campaigns).forEach((campaign) => {
-        data[category].Campaigns[campaign].Emblems.forEach((commendation) => {
-          if (commendation.Completed) {
-            // all completed commendations have this tag
-            // Just fix the grade, value and threshold
-            all.push(new Commendation(allCategories[category], commendation.title, commendation.subtitle, commendation.MaxGrade, commendation.MaxGrade, commendation.Threshold == 0 ? 1 : commendation.Value, commendation.Threshold == 0 ? 1 : commendation.Threshold, commendation.image));
-            return;
-          }
-          // Otherwise its not completed, so add it normally
-          all.push(new Commendation(allCategories[category], commendation.title, commendation.subtitle, commendation.Grade, commendation.MaxGrade, commendation.Value, commendation.Threshold, commendation.image));
+          //createArr(x);
+        });
+      }
+    });
+    createArr(all);
+  } else {
+    if (!data[current].Campaigns) {
+      console.log(data[current].Emblems.Emblems);
+      createArr(data[current].Emblems.Emblems);
+    } else if (data[current].Campaigns) {
+      let campaigns = Object.keys(data[current].Campaigns);
+      campaigns.forEach((campaign) => {
+        data[current].Campaigns[campaign].Emblems.forEach((emblem) => {
+          campaignArr.push(emblem);
         });
       });
+      createArr(campaignArr);
     }
-  });
-  /// Do fishing commendations separately
-
-  // Make array of valid fish names
-  let fishTypes = [];
-
-  Object.keys(fishing).forEach((type) => {
-    Object.keys(fishing[type]).forEach((fish) => {
-      fishTypes.push(fish);
-    });
-  });
-
-  // Check if commendation is a fish and add to fishing array
-  Object.keys(data.HuntersCall.Campaigns).forEach((campaign) => {
-    data.HuntersCall.Campaigns[campaign].Emblems.forEach((emblem) => {
-      let fishFlavor = emblem.title.split(' ')[3];
-      if (fishFlavor == undefined) {
-        return;
-      }
-
-      fishFlavor = fishFlavor.toLowerCase().replace(/[^A-Za-z]/g, '');
-
-      if (!fishTypes.includes(fishFlavor)) {
-        return;
-      }
-
-      let fishCategory = emblem.title
-        .split(' ')[4]
-        .toLowerCase()
-        .replace(/[^A-Za-z]/g, '');
-
-      if (fishCategory == 'hog') {
-        // single value that matches the conditions but doesnt belong
-        return;
-      }
-
-      // Must be valid fish, so add to correct array
-      fishing[fishCategory][fishFlavor].delivered = emblem.Value;
-    });
-  });
-
-  // Add in the cooking commendations (Not sure if we should keep this)
-  fishing['cooking']['chicken'].delivered = data.HuntersCall.Campaigns.cooking.Emblems[0].Value;
-  fishing['cooking']['pork'].delivered = data.HuntersCall.Campaigns.cooking.Emblems[1].Value;
-  fishing['cooking']['snake'].delivered = data.HuntersCall.Campaigns.cooking.Emblems[2].Value;
-  fishing['cooking']['shark'].delivered = data.HuntersCall.Campaigns.cooking.Emblems[3].Value;
-  fishing['cooking']['megalodon'].delivered = data.HuntersCall.Campaigns.cooking.Emblems[4].Value;
-  fishing['cooking']['kraken'].delivered = data.HuntersCall.Campaigns.cooking.Emblems[5].Value;
-
-  // Create sorted array
-  sortedAll = [...all].sort((a, b) => (b.percent > a.percent ? 1 : b.percent < a.percent ? -1 : 0));
+  }
 }
 
-// Depends on how you are loading the data using pupeteer, call function as needed
-reloadCommendations();
-// Example usage
-/*
-Object.keys(fishing).forEach((type) => {
-	Object.keys(fishing[type]).forEach((fish) => {
-		console.log(
-			fish +
-				": " +
-				fishing[type][fish].delivered +
-				"/" +
-				fishing[type][fish].required
-		);
-	});
-});
-
-sortedAll.forEach((e) => {
-	e.print();
-});
-
-all.forEach((e) => {
-	e.print();
-});
-*/
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// DISPLAY STUFF - PROBABLY MOVE TO ANOTHER FILE ////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 let paginationArr = [];
-createArr(false);
-function createArr(boolDisplaySorted) {
-  let arrayToDisplay = boolDisplaySorted == true ? sortedAll : all;
-  paginationArr = arrayToDisplay;
+function createArr(x) {
+  paginationArr = x;
   pagination(paginationArr);
 }
 
@@ -251,90 +83,102 @@ function pagination(arr) {
     len = 15;
   }
   for (let i = 0; i < len; i++) {
-    createDOM(arr[i]);
+    parseEmblems(arr[i]);
   }
   for (let i = 0; i < len; i++) {
     arr.shift();
   }
 }
 
-function createDOM(commendation) {
+function parseEmblems(item) {
   let width;
-  if (commendation.maxGrade === 1 && commendation.value / commendation.threshold === 1) {
+  if (item.MaxGrade === 1 && item.Value / item.Threshold === 1) {
     width = 71;
-  } else if (commendation.threshold === 0) {
+  } else if (item.Threshold === 0) {
     width = 0;
   } else {
-    width = (commendation.value / commendation.threshold) * 71;
-  }
-
-  if (isNaN(width)) {
-    console.log(commendation.threshold);
-    console.log(commendation);
+    width = (item.Value / item.Threshold) * 71;
   }
   document.getElementById('comms').innerHTML += `<div class="item">
-       <div class="img-container">
-         <button class="button"type="button" value="x">
-           <svg id="surround">
-             <image class="profile-grid__item-image" clip-path="url(#item-mask)" height="98%" width="98%" x="1%" y="1%" xlink:href="${commendation.image}"></image>
-             <use class="surround" xlink:href="#border" height="100%" width="100%"></use>
-           </svg>
-         </button>
-       </div>
-       <div class="info-container">
-         <div class="title">${commendation.title}</div>
-         <div class="progress">
-           <svg class="progress-bar" width="73" height="12" viewBox="0 0 73 12" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-             <rect x="1" y="1" width="71" height="10" fill="#323335"></rect>
-             <rect x="1" y="1" width="${width}" height="10" fill="#578C85"></rect>
-             
-           <div class="progress-text">${commendation.value}/${commendation.threshold}</div>
-         </div>
-         <div class="description">
-           <p class="desc-text">Grade ${commendation.grade} - ${commendation.subtitle}</p>
-         </div>
-       </div>
-     </div>`;
+    <div class="img-container">
+      <button class="button"type="button" value="x">
+        <svg id="surround">
+          <image class="profile-grid__item-image" clip-path="url(#item-mask)" height="98%" width="98%" x="1%" y="1%" xlink:href="${item.image}"></image>
+          <use class="surround" xlink:href="#border" height="100%" width="100%"></use>
+        </svg>
+      </button>
+    </div>
+    <div class="info-container">
+      <div class="title">${item.DisplayName}</div>
+      <div class="progress">
+        <svg class="progress-bar" width="73" height="12" viewBox="0 0 73 12" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="1" y="1" width="71" height="10" fill="#323335"></rect>
+          <rect x="1" y="1" width="${width}" height="10" fill="#578C85"></rect>
+        </svg>
+        <div class="progress-text">${item.Value}/${item.Threshold}</div>
+      </div>
+      <div class="description">
+        <p class="desc-text">Grade ${item.Grade} - ${item.Description}</p>
+      </div>
+    </div>
+  </div>`;
 }
 
-// Add event listener to dropdown
-// document.getElementById('displayFilter').addEventListener('change', () => {
-//   if (document.getElementById('displayFilter').value == 'complete') {
-//     createDOM(true);
-//   } else {
-//     createDOM(false);
-//   }
-// });
-// if dropdown changed to sort by completion, call createDOM(true)
-// else call createDOM(false)
-
-// Also add event listener to the other dropdown, and call onDropdownChange()
-
-function display(filters) {
-  // Hide all commendations
-  // change each class to display none
-
-  // Show commendations that match the filters
-  if (filters.contains('All')) {
-    // change all classes to display block/display flex/whatever
+function display(e) {
+  console.log('display');
+  let completeArr = [];
+  let incompleteArr = [];
+  let closestArr = [];
+  //sort all currently displayed cards by closest progress to 1
+  if (used === false) {
+    progress = document.querySelectorAll('.progress-text');
+    used = true;
   }
-
-  if (filters.contains('Incomplete')) {
-    // change "incomplete" class to display block/display flex/whatever
+  let usedProgress = progress;
+  usedProgress.forEach((item) => {
+    if (eval(item.outerText) === 1) {
+      completeArr.push(item.parentElement.parentElement.parentElement);
+    } else {
+      incompleteArr.push(item.parentElement.parentElement.parentElement);
+    }
+  });
+  if (e.target.value === 'complete') {
+    document.getElementById('comms').innerHTML = '';
+    completeArr.forEach((item) => {
+      document.getElementById('comms').appendChild(item);
+    });
+  } else if (e.target.value === 'incomplete') {
+    document.getElementById('comms').innerHTML = '';
+    incompleteArr.forEach((item) => {
+      document.getElementById('comms').appendChild(item);
+    });
+  } else if (e.target.value === 'all') {
+    document.getElementById('comms').innerHTML = '';
+    progress.forEach((item) => {
+      document.getElementById('comms').appendChild(item.parentElement.parentElement.parentElement);
+    });
+  } else if (e.target.value === 'closest') {
+    //display all cards by closest progress to 1
+    document.getElementById('comms').innerHTML = '';
+    progress.forEach((item) => {
+      //sort progress by closest to 1
+      if (eval(item.outerText) < 1) {
+        closestArr.push(new closest(eval(item.outerText), item));
+      }
+    });
+    closestArr.sort((a, b) => {
+      return b.value - a.value;
+    });
+    closestArr.forEach((item) => {
+      // console.log(item.element.parentElement.parentElement.parentElement);
+      document.getElementById('comms').appendChild(item.element.parentElement.parentElement.parentElement);
+    });
   }
-
-  // etc
 }
 
-function onDropdownChange() {
-  let filters = [];
-  // Add all selected filters to the array
-  if (selected == 'All') {
-    filters.push('All');
-  } else if (selected == 'Incomplete') {
-    filters.push('Incomplete');
+class closest {
+  constructor(value, element) {
+    this.value = value;
+    this.element = element;
   }
-  // etc
-  // Call display function with the required filters
-  display(filters);
 }
