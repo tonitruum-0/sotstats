@@ -41,7 +41,6 @@ export function parse(e) {
     createArr(all);
   } else {
     if (!data[current].Campaigns) {
-      console.log(data[current].Emblems.Emblems);
       createArr(data[current].Emblems.Emblems);
     } else if (data[current].Campaigns) {
       let campaigns = Object.keys(data[current].Campaigns);
@@ -125,7 +124,6 @@ function parseEmblems(item) {
 }
 
 function display(e) {
-  console.log('display');
   let completeArr = [];
   let incompleteArr = [];
   let closestArr = [];
