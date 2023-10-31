@@ -14,47 +14,95 @@ export function parse(e) {
   document.getElementById('comms').innerHTML = '';
   let current = e.target.value;
   let titles = Object.keys(data);
+  let all = [];
+  let campaignArr = [];
 
   if (e.target.value === 'All') {
     titles.forEach((title) => {
       //if not campaign
       if (!data[title].Campaigns) {
-        parseEmblems(data[title].Emblems.Emblems);
+        data[title].Emblems.Emblems.forEach((emblem) => {
+          all.push(emblem);
+        });
+        //console.log(data[title].Emblems.Emblems);
+        //createArr(data[title].Emblems.Emblems);
         //if campaign
       } else if (data[title].Campaigns) {
         let campaigns = Object.keys(data[title].Campaigns);
         campaigns.forEach((campaign) => {
-          let x = data[title].Campaigns[campaign].Emblems;
+          data[title].Campaigns[campaign].Emblems.forEach((emblem) => {
+            all.push(emblem);
+          });
 
-          parseEmblems(x);
+          //createArr(x);
         });
       }
     });
+    createArr(all);
   } else {
     if (!data[current].Campaigns) {
-      parseEmblems(data[current].Emblems.Emblems);
+      console.log(data[current].Emblems.Emblems);
+      createArr(data[current].Emblems.Emblems);
     } else if (data[current].Campaigns) {
       let campaigns = Object.keys(data[current].Campaigns);
       campaigns.forEach((campaign) => {
-        parseEmblems(data[current].Campaigns[campaign].Emblems);
+        data[current].Campaigns[campaign].Emblems.forEach((emblem) => {
+          campaignArr.push(emblem);
+        });
       });
+      createArr(campaignArr);
     }
   }
 }
 
-function parseEmblems(emblemData) {
-  emblemData.forEach((item) => {
-    let width;
-    if (item.MaxGrade === 1 && item.Value / item.Threshold === 1) {
-      width = 71;
-    } else {
-      width = (item.Value / item.Threshold) * 71;
+let paginationArr = [];
+function createArr(x) {
+  paginationArr = x;
+  pagination(paginationArr);
+}
+
+let ran = false;
+let offset;
+
+window.onscroll = function () {
+  if (!ran) {
+    offset = document.body.offsetHeight * 0.3;
+    ran = true;
+  } else {
+    if (window.innerHeight + window.pageYOffset >= document.body.offsetHeight - document.body.offsetHeight * 0.1) {
+      pagination(paginationArr);
     }
-    document.getElementById('comms').innerHTML += `<div class="item">
+  }
+};
+
+function pagination(arr) {
+  let len;
+  if (arr.length < 15) {
+    len = arr.length;
+  } else {
+    len = 15;
+  }
+  for (let i = 0; i < len; i++) {
+    parseEmblems(arr[i]);
+  }
+  for (let i = 0; i < len; i++) {
+    arr.shift();
+  }
+}
+
+function parseEmblems(item) {
+  let width;
+  if (item.MaxGrade === 1 && item.Value / item.Threshold === 1) {
+    width = 71;
+  } else if (item.Threshold === 0) {
+    width = 0;
+  } else {
+    width = (item.Value / item.Threshold) * 71;
+  }
+  document.getElementById('comms').innerHTML += `<div class="item">
     <div class="img-container">
       <button class="button"type="button" value="x">
         <svg id="surround">
-          <image class="profile-grid__item-background" xlink:href="https://athwsue2-prd-webscript-cdn-endpoint.azureedge.net/98ff6959413c46a6e7cb99d37d4e80aa/assets/profilev2/emblem-no-bg.png" height="98%" width="98%" x="1%" y="1%"></image>
           <image class="profile-grid__item-image" clip-path="url(#item-mask)" height="98%" width="98%" x="1%" y="1%" xlink:href="${item.image}"></image>
           <use class="surround" xlink:href="#border" height="100%" width="100%"></use>
         </svg>
@@ -66,7 +114,6 @@ function parseEmblems(emblemData) {
         <svg class="progress-bar" width="73" height="12" viewBox="0 0 73 12" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
           <rect x="1" y="1" width="71" height="10" fill="#323335"></rect>
           <rect x="1" y="1" width="${width}" height="10" fill="#578C85"></rect>
-          <rect class="indicator" x="0" y="0" width="73" height="12" fill="#0F0D09" clip-path="url(#progress-short)"></rect>
         </svg>
         <div class="progress-text">${item.Value}/${item.Threshold}</div>
       </div>
@@ -75,10 +122,10 @@ function parseEmblems(emblemData) {
       </div>
     </div>
   </div>`;
-  });
 }
 
 function display(e) {
+  console.log('display');
   let completeArr = [];
   let incompleteArr = [];
   let closestArr = [];
@@ -108,9 +155,7 @@ function display(e) {
   } else if (e.target.value === 'all') {
     document.getElementById('comms').innerHTML = '';
     progress.forEach((item) => {
-      document
-        .getElementById('comms')
-        .appendChild(item.parentElement.parentElement.parentElement);
+      document.getElementById('comms').appendChild(item.parentElement.parentElement.parentElement);
     });
   } else if (e.target.value === 'closest') {
     //display all cards by closest progress to 1
@@ -125,10 +170,8 @@ function display(e) {
       return b.value - a.value;
     });
     closestArr.forEach((item) => {
-      console.log(item.element.parentElement.parentElement.parentElement);
-      document
-        .getElementById('comms')
-        .appendChild(item.element.parentElement.parentElement.parentElement);
+      // console.log(item.element.parentElement.parentElement.parentElement);
+      document.getElementById('comms').appendChild(item.element.parentElement.parentElement.parentElement);
     });
   }
 }

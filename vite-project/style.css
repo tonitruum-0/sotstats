@@ -19,23 +19,24 @@ html {
   background-color: lightblue;
   box-sizing: border-box;
 
-  background: #0b1e24
-    linear-gradient(
-      to right,
-      rgb(1, 13, 11) 0%,
-      rgb(11, 30, 36) 25%,
-      rgb(11, 30, 36) 75%,
-      rgb(1, 13, 11) 100%
-    )
-    repeat-y;
+  background: #0b1e24 linear-gradient(to right, rgb(1, 13, 11) 0%, rgb(11, 30, 36) 25%, rgb(11, 30, 36) 75%, rgb(1, 13, 11) 100%) repeat-y;
 }
 
 /* Title */
 
 #title {
   margin-top: 2rem;
+  margin-bottom: 0;
   text-align: center;
   color: #f1eee5;
+}
+
+#disclaimer {
+  margin-top: 0;
+  margin-bottom: 2rem;
+  text-align: center;
+  color: #f1eee5;
+  font-size: 0.7rem;
 }
 
 /* Settings Box */
@@ -65,6 +66,15 @@ html {
 }
 
 /* Results Box */
+
+label,
+select {
+  margin: 0 1rem 3rem 0;
+}
+
+label {
+  color: white;
+}
 
 .results {
   margin: 1em auto;
@@ -231,4 +241,35 @@ defs {
   line-height: 20px;
   font-size: 12px;
   color: #333;
+}
+
+/* Fish Table */
+
+.fish {
+  margin: 1em auto;
+  text-align: center;
+  width: 80%;
+}
+
+.fish-table-title {
+  color: white;
+}
+
+.fish-table {
+  margin: 1em auto;
+  text-align: center;
+  width: 80vw;
+}
+
+.fish-table-cell {
+  color: white;
+}
+
+.fish-image {
+  max-width: 175px;
+  max-height: 175px;
+}
+
+.fish {
+  display: none;
 }
